@@ -4,7 +4,7 @@ let spheres = [];
 let sphereBodies = [];
 let sphereQueue = [];
 let sphereData = [];
-let SPN_sent = 0;
+let ETH_sent = 0;
 let selectedSphereGlobal = null;
 let ground;
 let room;
@@ -24,10 +24,10 @@ const isVisibilitySupported = typeof document.hidden !== "undefined";
 window.sphereQueue = sphereQueue;
 
 // TX settings
-const RPC_URL = "https://testnet-rpc.superposition.so";
-const BLOCK_EXPLORER = "https://testnet-explorer.superposition.so/tx";
-const MIN_AMOUNT = 0.1; // Min SPN
-const MAX_AMOUNT = 100000; // Max SPN
+const RPC_URL = "https://rpc.superposition.so";
+const BLOCK_EXPLORER = "https://explorer.superposition.so/tx";
+const MIN_AMOUNT = 0.1; // Min ETH
+const MAX_AMOUNT = 100000; // Max ETH
 const TPS_WINDOW = 30000; // 30 seconds
 
 // Sphere settings
@@ -181,7 +181,7 @@ function onSphereClick(event, canvas) {
         hit.material.emissiveIntensity = GLOW_INTENSITY;
         
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphere);
+          window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphere);
         }
       }
     }
@@ -205,14 +205,14 @@ function onMouseMove(event) {
       if (!window.isStatsHovered) {
         window.isStatsHovered = true;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     } else if (spheres.includes(hit)) {
       if (window.isStatsHovered) {
         window.isStatsHovered = false;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
       canvas.style.cursor = 'pointer';
@@ -221,7 +221,7 @@ function onMouseMove(event) {
       const sphereIndex = spheres.indexOf(hit);
       if (sphereIndex !== -1 && sphereData[sphereIndex]) {
         const amount = sphereData[sphereIndex].amount;
-        tooltipDiv.textContent = `${amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: amount > 1 ? 0 : 8})} SPN`;
+        tooltipDiv.textContent = `${amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: amount > 1 ? 0 : 8})} ETH`;
         tooltipDiv.style.display = 'block';
         tooltipDiv.style.left = `${event.clientX + 15}px`;
         tooltipDiv.style.top = `${event.clientY + 15}px`;
@@ -231,7 +231,7 @@ function onMouseMove(event) {
     if (window.isStatsHovered) {
       window.isStatsHovered = false;
       if (window.updateStatsDisplay) {
-        window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+        window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
       }
     }
     canvas.style.cursor = 'default';
@@ -410,7 +410,7 @@ function createMainStatsTexture() {
     const xAdjustment = 6;
     const yAdjustment = canvas.height / 35;
     ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-    ctx.fillText(`Volume: ${totalSent.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})} SPN`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
+    ctx.fillText(`Volume: ${totalSent.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})} ETH`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
     ctx.fillText(`Balls/Queue: ${ballCount}/${currentQueueCount}`, canvas.width/2 + xAdjustment, canvas.height / 2 - yAdjustment);
     ctx.fillText(`TPS: ${tps}`, canvas.width/2 + xAdjustment, canvas.height * 3/4 - yAdjustment);
     
@@ -500,7 +500,7 @@ function createSelectedTxTexture() {
     ctx.fillText('Selected', canvas.width/2 + xAdjustment, canvas.height/3);
     
     if (selectedSphere) {
-      const amount = `${selectedSphere.amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: selectedSphere.amount > 1 ? 0 : 8})} SPN`;
+      const amount = `${selectedSphere.amount.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: selectedSphere.amount > 1 ? 0 : 8})} ETH`;
       
       ctx.font = '24px Arial';
       ctx.fillStyle = window.isStatsHovered ? '#66d9ff' : '#4A9EFF';
@@ -897,7 +897,7 @@ function createSphere(amount, txHash) {
   // Calculate segments - scale between min and max segments
   const segmentSize = Math.round(MIN_SPHERE_SEGMENTS + (normalizedAmount * (MAX_SPHERE_SEGMENTS - MIN_SPHERE_SEGMENTS)));
   if (amount > 1) {
-    console.info(`${amount} SPN at ${txHash}`);
+    console.info(`${amount} ETH at ${txHash}`);
   }
 
   // Set colors based on amount thresholds
@@ -1106,8 +1106,8 @@ function processTransaction(txData) {
     return;
   }
   
-  // Add to total SPN sent
-  SPN_sent += txData.amount;
+  // Add to total ETH sent
+  ETH_sent += txData.amount;
   
   // Add to queue if not full
   if (sphereQueue.length < MAX_QUEUE_SIZE) {
@@ -1120,7 +1120,7 @@ function processTransaction(txData) {
   // Update stats display immediately after queue change
   if (window.updateStatsDisplay) {
     requestAnimationFrame(() => {
-      window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+      window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
     });
   }
 }
@@ -1155,7 +1155,7 @@ function startSphereCreationLoop() {
         lastSphereCreateTime = currentTime;
         
         if (window.updateStatsDisplay && currentTime - lastSphereCreateTime >= 500) {
-          window.updateStatsDisplay(SPN_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(ETH_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     }
