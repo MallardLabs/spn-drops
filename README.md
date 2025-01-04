@@ -1,6 +1,6 @@
 # spn-drops
 
-Physical real-time simulation of Superposition network transactions
+Physical real-time simulation of transactions on the Superposition mainnet network.
 
 This project is a fork of [sonic-drops](https://github.com/paintoshi/sonic-drops).  
 
