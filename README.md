@@ -12,9 +12,14 @@ Transactions are recorded live from the Superposition testnet network using a pu
 Ball size and color coresponds to the transaction amount.
 Click on the spheres to see the transaction details.
 
+
 Conduit Blue: 0 SPN
+
 Less Blue: 0 - 1 SPN
+
 Even less Blue: 1 - 1,000 SPN
+
 White with a tinge of blue: 1,000 - 100,000 SPN
+
 White: > 100,000 SPN
 
