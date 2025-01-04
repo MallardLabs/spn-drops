@@ -8,7 +8,7 @@ This fork includes updated styling and migration from Sonic to Superposition tes
 
 ## How does it work?
 
-Transactions are recorded live from the Superposition testnet network using a public RPC.
+Transactions are recorded live from the Superposition network using a public RPC.
 Ball size and color coresponds to the transaction amount.
 Click on the spheres to see the transaction details.
 
